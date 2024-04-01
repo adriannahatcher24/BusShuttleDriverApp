@@ -119,7 +119,7 @@ export class LogService {
     return this.http.post<Log>(this.baseUrl + '/store.php', { data: log })
       .pipe(
         retryWhen(this.generateRetryStrategy(log)({
-          scalingDuration: 500,
+          scalingDuratinion: 500,
           excludedStatusCodes: [500]
         })),
         catchError(this.handleError));
@@ -128,11 +128,12 @@ export class LogService {
   private generateRetryStrategy(log: Log) {
     const retryStrategy = ({
       maxRetryAttempts = 2,
-      scalingDuration = 500,
+      scalingDuratinion = 500,
+      
       excludedStatusCodes = []
     }: {
       maxRetryAttempts?: number,
-      scalingDuration?: number,
+      scalingDuratinion?: number,
       excludedStatusCodes?: number[]
     } = {}) => (attempts: Observable<any>) => {
       return attempts.pipe(
@@ -148,9 +149,9 @@ export class LogService {
           }
           console.log( // uncomment for demonstration
             `Attempt ${retryAttempt}: retrying in ${retryAttempt *
-            scalingDuration}ms`
+            scalingDuratinion}ms`
           );
-          return timer(retryAttempt * scalingDuration);
+          return timer(retryAttempt * scalingDuratinion);
         }),
         // finalize(() => (console.log('Error! something went wrong.')))
       );
